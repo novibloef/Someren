@@ -1,0 +1,132 @@
+﻿@model List<Database_Project.Models.Student>
+
+@{
+    ViewData["Title"] = "Students";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Add Student</h1>
+</div> 
+
+<form asp-controller="Students" asp-action="AddStudent" method="post">
+    <div class="mb-3">
+        <label for="klas" class="form-label">Klas</label>
+        <input id="klas" name="Klas" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label for="naam" class="form-label">Naam</label>
+        <input id="naam" name="Naam" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label for="achternaam" class="form-label">Achternaam</label>
+        <input id="achternaam" name="Achternaam" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label for="telefoon" class="form-label">Telefoon</label>
+        <input id="telefoon" name="Telefoon" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add student</button>
+</form>
+
+<div class="text-center">
+    <h1 class="display-4">Students will be displayed here</h1>
+    <p>Hella students</p>
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <form asp-controller="Students" asp-action="EditStudent" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Student</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <input type="hidden" id="editId" name="ID" />
+
+                    <div class="mb-3">
+                        <label class="form-label">Klas</label>
+                        <input type="text" class="form-control" id="editKlas" name="Klas" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Naam</label>
+                        <input type="text" class="form-control" id="editNaam" name="Naam" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Achternaam</label>
+                        <input type="text" class="form-control" id="editAchternaam" name="Achternaam" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Telefoon</label>
+                        <input type="text" class="form-control" id="editTelefoon" name="Telefoon" />
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Klas</th>
+            <th>Naam</th>
+            <th>Achternaam</th>
+            <th>Telefoon</th>
+            <th>actions</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var student in Model)
+            {
+                <tr>
+                    <td>@student.Klas</td>
+                    <td>@student.Naam</td>
+                    <td>@student.Achternaam</td>
+                    <td>@student.Telefoon</td>
+                    <td>
+    <button class="btn btn-warning btn-sm"
+            data-bs-toggle="modal"
+            data-bs-target="#editModal"
+            onclick="fillEditModal('@student.ID', '@student.Klas', '@student.Naam', '@student.Achternaam', '@student.Telefoon')">
+        Edit
+    </button>
+
+    <form asp-controller="Students" asp-action="DeleteStudent" method="post" style="display:inline;">
+        <input type="hidden" name="id" value="@student.ID" />
+        <button type="submit" class="btn btn-danger btn-sm">DEL</button>
+    </form>
+</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+<script>
+    function fillEditModal(id, klas, naam, achternaam, telefoon) {
+        document.getElementById("editId").value = id;
+        document.getElementById("editKlas").value = klas;
+        document.getElementById("editNaam").value = naam;
+        document.getElementById("editAchternaam").value = achternaam;
+        document.getElementById("editTelefoon").value = telefoon;
+    }
+</script>
