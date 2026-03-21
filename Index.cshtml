@@ -1,0 +1,135 @@
+@model List<Database_Project.Models.Lecturer>
+
+@{
+    ViewData["Title"] = "Lecturers";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Add Lecturer</h1>
+</div>
+
+<form asp-controller="Lecturers" asp-action="AddLecturer" method="post">
+    <div class="mb-3">
+        <label for="naam" class="form-label">Naam</label>
+        <input id="naam" name="Naam" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label for="achternaam" class="form-label">Achternaam</label>
+        <input id="achternaam" name="Achternaam" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label for="telefoon" class="form-label">Telefoon</label>
+        <input id="telefoon" name="Telefoon" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label for="leeftijd" class="form-label">Leeftijd</label>
+        <input id="leeftijd" name="Leeftijd" type="number" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add lecturer</button>
+</form>
+
+<hr />
+
+<div class="text-center">
+    <h1 class="display-4">Lecturers</h1>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <form asp-controller="Lecturers" asp-action="EditLecturer" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Lecturer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <input type="hidden" id="editId" name="ID" />
+
+                    <div class="mb-3">
+                        <label class="form-label">Naam</label>
+                        <input type="text" class="form-control" id="editNaam" name="Naam" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Achternaam</label>
+                        <input type="text" class="form-control" id="editAchternaam" name="Achternaam" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Telefoon</label>
+                        <input type="text" class="form-control" id="editTelefoon" name="Telefoon" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Leeftijd</label>
+                        <input type="number" class="form-control" id="editLeeftijd" name="Leeftijd" />
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Naam</th>
+            <th>Achternaam</th>
+            <th>Telefoon</th>
+            <th>Leeftijd</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var lecturer in Model)
+        {
+            <tr>
+                <td>@lecturer.Naam</td>
+                <td>@lecturer.Achternaam</td>
+                <td>@lecturer.Telefoon</td>
+                <td>@lecturer.Leeftijd</td>
+                <td>
+                    <button class="btn btn-warning btn-sm"
+                            data-bs-toggle="modal"
+                            data-bs-target="#editModal"
+                            onclick="fillEditModal(
+                                '@lecturer.ID',
+                                '@lecturer.Naam',
+                                '@lecturer.Achternaam',
+                                '@lecturer.Telefoon',
+                                '@lecturer.Leeftijd')">
+                        Edit
+                    </button>
+
+                    <form asp-controller="Lecturers" asp-action="DeleteLecturer" method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="@lecturer.ID" />
+                        <button type="submit" class="btn btn-danger btn-sm">DEL</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    function fillEditModal(id, naam, achternaam, telefoon, leeftijd) {
+        document.getElementById("editId").value = id;
+        document.getElementById("editNaam").value = naam;
+        document.getElementById("editAchternaam").value = achternaam;
+        document.getElementById("editTelefoon").value = telefoon;
+        document.getElementById("editLeeftijd").value = leeftijd;
+    }
+</script>
