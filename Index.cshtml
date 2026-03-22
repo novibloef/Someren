@@ -1,0 +1,149 @@
+﻿@model List<Database_Project.Models.Activities>
+
+@{
+    ViewData["Title"] = "Activities";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Add Activity</h1>
+</div>
+
+<form asp-controller="Activities" asp-action="AddActivity" method="post">
+    <div class="mb-3">
+        <label for="persoonID" class="form-label">Person ID</label>
+        <input id="persoonID" name="persoonID" type="number" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="naam" class="form-label">Activity Name</label>
+        <input id="naam" name="Naam" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="datum" class="form-label">Start Date</label>
+        <input id="datum" name="Datum" type="date" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="tijd" class="form-label">Start Time</label>
+        <input id="tijd" name="Tijd" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="duur" class="form-label">Duration</label>
+        <input id="duur" name="Duur" class="form-control" required />        
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Activity</button>
+</form>
+
+<hr />
+
+<div class="text-center">
+    <h1 class="display-4">Activities</h1>
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-controller="Activities" asp-action="EditActivity" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Activity</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <input type="hidden" id="editId" name="ID" />
+                    <input type="hidden" id="editPersoonID" name="PersoonID" />
+                    <input type="hidden" id="editRol" name="Rol" />
+
+                    <div class="mb-3">
+                        <label class="form-label">Activity Name</label>
+                        <input type="text" class="form-control" id="editNaam" name="Naam" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Start Date</label>
+                        <input type="text" class="form-control" id="editDatum" name="Datum" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Start Time</label>
+                        <input type="text" class="form-control" id="editTijd" name="Tijd" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Duration</label>
+                        <input type="text" class="form-control" id="editDuur" name="Duur" />
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Activity Name</th>
+            <th>Start Date</th>
+            <th>Start Time</th>
+            <th>Duration</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Count > 0)
+        {
+            @foreach (var activity in Model)
+            {
+                <tr>
+                    <td>@activity.Voornaam</td>
+                    <td>@activity.Achternaam</td>
+                    <td>@activity.Naamactiviteit</td>
+                    <td>@activity.Startdate</td>
+                    <td>@activity.Starttime</td>
+                    <td>@activity.Duration</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm"
+                                data-bs-toggle="modal"
+                                data-bs-target="#editModal"
+                                onclick="fillEditModal('@activity.ID', '@activity.PersoonID', '@activity.Rol', '@activity.Naamactiviteit', '@activity.Startdate', '@activity.Starttime', '@activity.Duration')">
+                            Edit
+                        </button>
+
+                        <form asp-controller="Activities" asp-action="DeleteActivity" method="post" style="display:inline;" onsubmit="return confirm('Are you sure?');">
+                            <input type="hidden" name="id" value="@activity.ID" />
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="7" class="text-center">No activities found.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    function fillEditModal(id, persoonID, rol, naam, datum, tijd, duur) {
+        document.getElementById("editId").value = id;
+        document.getElementById("editPersoonID").value = persoonID;
+        document.getElementById("editRol").value = rol;
+        document.getElementById("editNaam").value = naam;
+        document.getElementById("editDatum").value = datum;
+        document.getElementById("editTijd").value = tijd;
+        document.getElementById("editDuur").value = duur;
+    }
+</script>
